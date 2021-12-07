@@ -1,14 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-// import {
-//   deleteComment,
-//   getComments,
-//   notFound,
-//   postComment,
-//   patchComment
-// } from './controllers'
+
+import { eventsControllerMethods } from "./controllers/events";
 import makeCallback from "./express-callback";
+import { process } from "babel-jest";
+
+const Database = require("../db/db.js");
 
 dotenv.config();
 
@@ -20,17 +18,23 @@ app.use((_, res, next) => {
   next();
 });
 
-// app.post(`${apiRoot}/comments`, makeCallback(postComment))
-// app.delete(`${apiRoot}/comments/:id`, makeCallback(deleteComment))
-// app.delete(`${apiRoot}/comments`, makeCallback(deleteComment))
-// app.patch(`${apiRoot}/comments/:id`, makeCallback(patchComment))
-// app.patch(`${apiRoot}/comments`, makeCallback(patchComment))
-// app.get(`${apiRoot}/comments`, makeCallback(getComments))
-// app.use(makeCallback(notFound))
+Database.connect({
+  username: process.env.DB_USER,
+  password: process.env.DB_USER_PASSWORD,
+  dbname: process.env.EVENTS_DB_NAME,
+});
+
+//TODO : for each controller create init() method and map routes to controller methods inside. then, loop and call all init methods here
+
+app.post(`/event/create`, makeCallback(eventsControllerMethods.postEvent));
+app.get(`/event/:id`, makeCallback(eventsControllerMethods.getEvent));
+app.get(`/events`, makeCallback(eventsControllerMethods.getEventsInSlot));
+
+//TODO: add NOT FOUND
 
 // listen for requests
-app.listen(3000, () => {
-  console.log("Server is listening on port 3000");
+app.listen(8080, () => {
+  console.log("Server is listening on port 8080");
 });
 
 export default app;
