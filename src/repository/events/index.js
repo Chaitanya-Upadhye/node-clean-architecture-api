@@ -18,13 +18,13 @@ async function getEventById({ id }) {
   return eventModel.findById(id).lean();
 }
 
-async function getEventByDate({ date }) {
+async function getEventsByDate({ date }) {
   const docs = await eventModel.find({ date }).exec();
   return docs;
 }
 
-async function updateEvent({ eventInfo }) {
-  const { id, ...rest } = eventIn;
+async function updateEvent(eventInfo) {
+  const { id, ...rest } = eventInfo;
   let updatedEvent = await eventModel.findOneAndUpdate({ _id: id }, rest, {
     new: true,
   });
@@ -50,6 +50,6 @@ export const eventsRepo = {
   createEvent,
   getEventById,
   updateEvent,
-  getEventByDate,
+  getEventsByDate,
   getEventsForSlots,
 };

@@ -29,6 +29,7 @@ Database.connect({
 app.post(`/event/create`, makeCallback(eventsControllerMethods.postEvent));
 app.get(`/event/:id`, makeCallback(eventsControllerMethods.getEvent));
 app.get(`/events`, makeCallback(eventsControllerMethods.getEventsInSlot));
+app.put(`/event/:eventId`, makeCallback(eventsControllerMethods.updateEvent));
 
 //TODO: add NOT FOUND
 

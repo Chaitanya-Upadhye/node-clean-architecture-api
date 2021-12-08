@@ -47,8 +47,22 @@ async function getEventsInSlot(httpRequest) {
   }
 }
 
+async function updateEvent(httpRequest) {
+  try {
+    const { params, body = {} } = httpRequest;
+    const updatedEvent = await eventsUseCases.updateEvent(
+      params?.eventId,
+      body
+    );
+    return responseHandler(200, { updatedEvent });
+  } catch (error) {
+    return responseHandler(400, { error: error?.message });
+  }
+}
+
 export const eventsControllerMethods = {
   getEvent,
   postEvent,
   getEventsInSlot,
+  updateEvent,
 };
